@@ -6,7 +6,7 @@ import { checkSchema, validationResult } from 'express-validator';
 const router = Router()
 // Ініціалізуйте `upload` за допомогою `UploadManager`
 const upload = UploadManager.getUploadStorage(); 
-
+router.get('/', CarsController.toHomePage);
 router.get('/home', CarsController.getHomePage);
 router.get('/about', CarsController.getAboutPage);
 
