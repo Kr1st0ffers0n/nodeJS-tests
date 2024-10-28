@@ -27,6 +27,9 @@ app.use((req, res, next) => {
     next(err)
 })
 // error handler 
+app.get('/', (req, res, next) => {
+    res.redirect('/cars/home'); // або рендерте відповідний файл views/index
+});
 app.use((err, req, res, next) => {
     // set locals, only providing error in development 
     res.locals.message = err.message
