@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>Add new car</title>
+    <script src="/javascripts/RequestManager.js"></script>
+    <script>
+        function onInputFile(event) {
+          RequestManager.handleFileSelect(event, '#imgPreview')
+        }
+    </script>
+</head>
+<body>
+  <%- include('sections/header')%>
+    <h1>Add new Car</h1>
+    <!-- ===!!! Умова в action === Якщо натиснути на кнопку редагування на сторінці home то в форму передається об'єкт car із своїми параметрами обраний за його id, параметри заповнять поля, але дадуть можливість їх редагувати -->
+    <form enctype="multipart/form-data" action="<%= car.id ? '/cars/edit/' + car.id + '?_method=PUT' : '/cars/addNewCar' %>" method="post">
+        <div class="input-block">
+            <label>Car Brand</label>
+            <input type="text" name="brand" value="<%= car.brand %>">
+        </div>
+        <div class="input-block">
+            <label>Car Year</label>
+            <input type="text" name="year" value="<%= car.year %>">
+        </div>
+        <div class="input-block">
+            <label>Car Number</label>
+            <input type="text" name="number" value="<%= car.number %>">
+        </div>
+        <div class="input-block">
+            <label>Car Brand</label>
+            <input type="file" name="carImage" accept="image/*" value="" onchange="onInputFile(event)">
+            <img id="imgPreview" src="/images.jpg" alt="no image">
+        </div>
+        <button class="add-btn-form" type="submit"><%= car.id? 'Оновити' : 'Додати'%></button>
+        <div>
+            <% if (errors && errors.length > 0) { %>
+                <ul class="error-list">
+                    <% errors.forEach(function(error) { %>
+                        <li><%= error %></li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </div>  
+    </form>
+</body>
+</html>

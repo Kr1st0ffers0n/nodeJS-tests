@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cars Catalogue</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/RequestManager.js"></script>
+    <script>
+      async function deleteCar(id) {
+        try {
+          const response = await fetch('/cars', {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id}),
+          })
+          if (response.ok) {
+            console.log("Car deleted successfully");
+            // Перенаправляємо користувача на головну сторінку
+            window.location.href = '/cars/home'
+          } else {
+            console.log("Failed to delete car");
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <%- include('sections/header')%>
+    <div class="page-container">
+      <h1>Dream Cars</h1>
+      <ul class="main-container">
+        <li>
+          <ul class="list-head">
+            <li>Car Brand</li>
+            <li>Car year</li>
+            <li>Car number</li>
+            <li>Car image</li>
+            <li>Car options</li>
+          </ul>
+        </li>
+        <% cars.forEach(car => {%>
+          <ul class="car-list">
+            <li><%= car.brand%></li>
+            <li><%= car.year%></li>
+            <li><%= car.number%></li>
+            <li>
+              <!-- !!! обов'язково вказувати перед шляхом символ - "/" -->
+               <!-- Вказуємо ім'я властивості об'єкта для того щоб підтягнути картинку (multer)-->
+              <img src="/<%= car.imageSrc %>" alt="cant't load img">
+            </li>
+            <li>
+              <!-- Передаємо логічний шлях для редагування елемента і додаємо id цього елемента щоб передати його параметри у форму редагування -->
+              <a href="/cars/edit/<%= car.id%>">Редагувати</a>
+
+              <button onclick="deleteCar('<%= car.id%>')">Видалити</button>
+            </li>
+          </ul>
+          <% }) %>
+      </ul>
+        <a href="addNewCar" class="adding-button">Додати авто</a>
+      </div>
+    </div>
+  </body>
+</html>
