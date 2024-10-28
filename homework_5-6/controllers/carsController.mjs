@@ -5,7 +5,9 @@ import infoSchema from "../models/infoSchema.mjs";  // Імпорт схеми
 
 class CarsController {
     static infoSchema = infoSchema; // Призначення схеми для доступу з роутера
-    
+    static toHomePage(req, res) {
+        res.redirect('/cars/home');
+    }
     static getHomePage(req, res) {
         try {
             // Викликаємо список усіх елментів
