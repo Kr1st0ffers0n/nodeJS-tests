@@ -39,5 +39,9 @@ app.use((err, req, res, next) => {
     res.status(err.status || 500)
     res.render('error')
 })
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+    console.log(`Сервер працює на порту ${PORT}`)
+})
 
 export default app
