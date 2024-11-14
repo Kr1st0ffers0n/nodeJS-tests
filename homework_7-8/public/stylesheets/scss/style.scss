@@ -1,0 +1,56 @@
+@use "sass:math";
+
+@import "_reset";
+@import "_adaptValue";
+// У файлі _adaptValue вказати параметри сторінки і контейнеру
+@import "_common";
+@import "_icons";
+
+body {
+	// Скролл заблоковано
+	.lock & {
+		overflow: hidden;
+		touch-action: none;
+		overscroll-behavior: none;
+	}
+	// Сайт завантажений
+	.loaded & {
+	}
+} 
+
+.wrapper {
+    min-height: 100%;
+    overflow: clip;
+    display: flex;
+    flex-direction: column;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: math.div(26 , 16);
+    background-color: $page_bg;
+    color: $white_text;
+}
+[class*="__container"] {
+    max-width: 1480px;
+    margin: 0 auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.wrapper > main {
+    flex: 1 0 auto;
+}
+.burger-button {
+    display: none;
+    position: relative;
+    z-index: 10; 
+    @extend %burger;
+    &:before, &:after, & span  {
+    }
+}
+
+@import "_header";
+@import "_main";
+@import "_register";
+@import "_usersList";
+@import "_addProductPage";
+@import "_products";

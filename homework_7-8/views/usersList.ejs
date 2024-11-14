@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/css/style.css">
+    <title>Users</title>
+</head>
+<script>
+    async function deleteUser(id) {
+        try {
+          const response = await fetch('/users', {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id}),
+          })
+          if (response.ok) {
+            console.log("User deleted successfully");
+            // Перенаправляємо користувача на головну сторінку
+            window.location.href = '/users'
+          } else {
+            console.log("Failed to delete user");
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+</script>
+<body>
+    <div class="wrapper">
+        <%- include('sections/header')%>
+        <main class="main">
+            <div class="users">
+                <div class="users__container">
+                    <h1>Users List</h1>
+                    <ul class="users__list list-users">
+                        <li>
+                            <ul class="list-users__header">
+                                <li>Avatar</li>
+                                <li>Name</li>
+                                <li>Email</li>
+                                <!-- <li>Password</li> -->
+                                <li>Options</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <% users.forEach(user => { %>
+                                <ul class="list-users__item item-users">
+                                    <li class="item-users__image">
+                                        <img src="<%= user.avatar %>" alt="no image">
+                                    </li>
+                                    <li class="item-users__name"><span><%= user.name %></span></li>
+                                    <li class="item-users__mail"><span><%= user.email %></span></li>
+                                    <!-- <li class="item-users__password"><span><%= user.password %></span></li> -->
+                                    <li class="item-users__buttons">
+                                        <a href="/users/register/<%= user.id %>">Edit</a>
+                                        <button onclick="deleteUser('<%= user.id%>')">Delete</button>
+                                    </li>
+                                </ul>
+                            <% }) %>
+                        </li>
+                        <li class="list-users__add-user">
+                            <a href="/users/register">Add New User</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+        <footer class="footer"></footer>
+    </div>
+    
+</body>
+</html>

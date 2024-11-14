@@ -1,0 +1,48 @@
+
+.header {
+    min-height: rem(100);
+    padding: rem(20) 0;
+
+    // .header__container
+    &__container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    // .header__menu
+    &__menu {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: rem(30);
+        font-weight: 600;
+        font-size: rem(20);
+    }
+}
+.menu-main {
+
+    // .menu-main__point
+    &__point {
+        & a {
+            position: relative;
+            &:before {
+                content: '';
+                position: absolute;
+                bottom: rem(-5);
+                left: 50%;
+                width: 0;
+                height: rem(1);
+                background-color: #fff;
+                transition: all 0.3s;
+            }
+        }
+        @media (any-hover:hover) {
+            &:hover a:before {
+                width: 100%;
+                left: 0;
+                transition: all 0.3s;
+            }
+        }
+    }
+}

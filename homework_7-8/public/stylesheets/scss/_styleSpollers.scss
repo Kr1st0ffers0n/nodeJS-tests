@@ -1,0 +1,144 @@
+@use "sass:math";
+
+@import "_reset.scss";
+@import url(https://fonts.googleapis.com/css?family=Poppins:regular,500,600,700&display=swap);
+
+
+
+.spollers {
+    padding: rem(50) rem(20);
+    font-size: rem(16);
+    font-weight: 500;
+    line-height: math.div(28 , 16);
+    min-height: 100%;
+    &>*:not(:last-child) {
+        margin-bottom: rem(30);
+    }
+    &>* {
+        border-radius: rem(10);
+        padding: rem(20);
+    }
+
+    // .spollers__regular
+
+    &__regular {
+        background-color: darkcyan;
+    }
+
+    // .spollers__min
+
+    &__min {
+        background-color: darkorchid;
+    }
+
+    // .spollers__max
+
+    &__max {
+        background-color: darkorange;
+    }
+}
+.regular-spollers {
+
+    // .regular-spollers__spoller
+
+    &__spoller {
+    }
+}
+.min-spollers {
+
+    // .min-spollers__spoller
+
+    &__spoller {
+    }
+}
+.max-spollers {
+
+    // .max-spollers__spoller
+
+    &__spoller {
+    }
+}
+.spollers-item {
+
+}
+.spoller {
+
+    // .spoller__button
+
+    &__button {
+        display: block;
+        text-align: left;
+        width: 100%;
+        font-weight: 700;
+        position: relative;
+        .spollers-item._init & {
+            cursor: pointer;
+            padding: rem(10);
+        }
+        .spollers-item._init &::before,
+        .spollers-item._init &::after {
+            content: '';
+            width: rem(20);
+            height: rem(2);
+            background-color: #fff;
+            position: absolute;
+            right: rem(10);
+            top: rem(20);
+            transition: all 0.3s;
+        }
+        .spollers-item._init &::after {
+            transform: rotate(-90deg);
+        }
+        .spollers-item._init &._active::after {
+            transform: rotate(0deg);
+        }
+    }
+
+    // .spoller__body
+
+    &__body {
+        transition: all 0.5s;
+        &._slide {
+            transition: all 0.5s;
+        }
+    }
+}
+
+/* HTML
+<div class="spollers">
+                <div data-spollers data-one-spoller class="spollers-item  spollers__regular regular-spollers">
+                    <div class="regular-spollers__spoller spoller">
+                        <button tabindex="-1" type="button" data-spoller class="spoller__button">Regular Spoller Title</button>
+                        <div class="spoller__body">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat ab quae rerum ut soluta animi quidem accusantium voluptate, repellendus dolores fugiat, pariatur vitae voluptatibus laborum hic inventore enim rem vero!</div>
+                    </div>
+                    <div class="regular-spollers__spoller spoller">
+                        <button tabindex="-1" type="button" data-spoller class="spoller__button">Regular Spoller Title</button>
+                        <div class="spoller__body">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat ab quae rerum ut soluta animi quidem accusantium voluptate, repellendus dolores fugiat, pariatur vitae voluptatibus laborum hic inventore enim rem vero!</div>
+                    </div>
+                    <div class="regular-spollers__spoller spoller">
+                        <button tabindex="-1" type="button" data-spoller class="spoller__button">Regular Spoller Title</button>
+                        <div class="spoller__body">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat ab quae rerum ut soluta animi quidem accusantium voluptate, repellendus dolores fugiat, pariatur vitae voluptatibus laborum hic inventore enim rem vero!</div>
+                    </div>
+                </div>
+                <div data-spollers="650,min" data-one-spoller class="spollers-item spollers__min min-spollers">
+                    <div class="min-spollers__spoller spoller">
+                        <button tabindex="-1" type="button" data-spoller class="spoller__button">Min Spoller Title</button>
+                        <div class="spoller__body">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat ab quae rerum ut soluta animi quidem accusantium voluptate, repellendus dolores fugiat, pariatur vitae voluptatibus laborum hic inventore enim rem vero!</div>
+                    </div>
+                    <div class="min-spollers__spoller spoller">
+                        <button tabindex="-1" type="button" data-spoller class="spoller__button">Min Spoller Title</button>
+                        <div class="spoller__body">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat ab quae rerum ut soluta animi quidem accusantium voluptate, repellendus dolores fugiat, pariatur vitae voluptatibus laborum hic inventore enim rem vero!</div>
+                    </div>
+                </div>
+                <div data-spollers="800,max" class="spollers-item spollers__max max-spollers">
+                    <div class="max-spollers__spoller spoller">
+                        <button tabindex="-1" type="button" data-spoller class="spoller__button">Max Spoller Title</button>
+                        <div class="spoller__body">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat ab quae rerum ut soluta animi quidem accusantium voluptate, repellendus dolores fugiat, pariatur vitae voluptatibus laborum hic inventore enim rem vero!</div>
+                    </div>
+                    <div class="max-spollers__spoller spoller">
+                        <button tabindex="-1" type="button" data-spoller class="spoller__button">Max Spoller Title</button>
+                        <div class="spoller__body">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat ab quae rerum ut soluta animi quidem accusantium voluptate, repellendus dolores fugiat, pariatur vitae voluptatibus laborum hic inventore enim rem vero!</div>
+                    </div>
+                </div>
+            </div>
+*/

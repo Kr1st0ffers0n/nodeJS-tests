@@ -1,0 +1,144 @@
+.register {
+    padding: rem(50);
+
+    // .register__container
+    &__container {
+        display: flex;
+        flex-direction: column;
+        gap: rem(20);
+        justify-content: center;
+        align-items: center;
+    }
+
+    // .register__errors
+    &__errors {
+        display: flex;
+        flex-direction: column;
+        gap: rem(10);
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    // .register__form
+    &__form {
+        width: rem(420);
+        display: flex;
+        flex-direction: column;
+        gap: rem(20);
+        & form {
+            display: flex;
+            flex-direction: column;
+            gap: rem(20);
+        }
+    }
+}
+.errors {
+
+    // .errors__list
+    &__list {
+        color: red;
+        text-decoration: underline;
+        font-weight: 500;
+        font-size: rem(16);
+    }
+}
+.form-register {
+
+    // .form-register__title
+    &__title {
+        align-self: center;
+        display: inline-block;
+        background: $main_gradient;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    // .form-register__field
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: rem(5);
+        & label {
+            font-size: rem(16);
+            font-weight: 400;
+        }
+        & input {
+            background-color: $input_bg;
+            border: rem(1) solid $input_border;
+            min-height: rem(55);
+            max-width: rem(420);
+            padding: rem(5) rem(15);
+            transition: all 0.3s;
+            &:hover {
+                box-shadow: 0 0 rem(15) 0 #fff;
+                transition: all 0.3s;
+            }
+            &:focus {
+                outline: none;
+                border-width: rem(2);
+                box-shadow: 0 0 rem(15) 0 rgb(0, 255, 191);
+                transition: all 0.3s;
+            }
+        }
+        & .field-upload-image__input {
+            margin-bottom: rem(20);
+            width: 100%;
+            height: rem(55);
+            position: relative;
+            background-color: $input_bg;
+            border: rem(1) solid $input_border;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+            &:hover {
+                box-shadow: 0 0 rem(15) 0 #fff;
+                transition: all 0.3s;
+            }
+            & span {
+                font-weight: 600;
+                font-size: rem(18);
+                text-align: center;
+            }
+        }
+        & #reg_Avatar {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        & .field-upload-image__image {
+            margin-bottom: rem(20);
+            align-self: center;
+            width: rem(100);
+            height: rem(100);
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            & img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+
+    // .form-register__submit-btn
+    &__submit-btn {
+        width: 100%;
+        text-transform: uppercase;
+        padding: rem(15) rem(20);
+        background: $main_gradient;
+        transition: all 0.3s;
+        &:hover {
+            background: $hover_gradient;
+            box-shadow: $neon_shadow;
+            transition: all 0.3s;
+        }
+    }
+}

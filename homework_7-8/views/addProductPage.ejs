@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/css/style.css">
+    <title>Add new Product</title>
+    <script src="/javascripts/RequestManager.js"></script>
+    <script>
+        function onInputFile(event) {
+          RequestManager.handleFileSelect(event, '#prodPreview')
+        }
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <%- include('sections/header')%>
+        <main class="main">
+            <div class="product-form">
+                <div class="product-form__container">
+                    <h2>Add new product</h2>
+                    <div class="product-form__form form-product">
+                        <div class="errors">
+                            <% if (errors.length > 0) {%>
+                                <ul class="errors__list">
+                                    <% errors.forEach(error => { %>
+                                        <li>
+                                            <%= error.msg %>
+                                        </li>
+                                   <% }) %>
+                                </ul>
+                            <% } %>
+                        </div>
+                        <form action="/products/add<%= data?.id ? '/' + data.id : '' %>" method="post" enctype="multipart/form-data">
+                            <div class="form-product__field">
+                                <label for="productName">Name of product</label>
+                                <input id="productName" type="text" name="name" value="<%= data ? data.name : '' %>">
+                            </div>
+                            <div class="form-product__field">
+                                <label for="productPrice">Price of product</label>
+                                <input id="productPrice" type="number" name="price" value="<%= data ? data.price : '' %>">
+                            </div>
+                            <div class="form-product__field">
+                                <label for="productDescription">Product Description</label>
+                                <textarea id="productDescription" name="description" value="<%= data ? data.description : '' %>"></textarea>
+                            </div>
+                            <div class="form-product__field">
+                                <select name="owner">
+                                    <% owners.forEach(owner => { %>
+                                        <option value="<%= owner.id %>"><%= owner.name %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            <div class="form-product__field field-image">
+                                <div class="field-image__input">
+                                    <label for="productImg">Upload product Image</label>
+                                    <input onchange="onInputFile(event)" accept="image/*" id="productImg" type="file" name="prodImage" value="<%= data ? data.prodImage : '' %>">
+                                </div>
+                                <div class="field-image__image">
+                                    <img id="prodPreview" src="/images/product.png" alt="no image">
+                                </div>
+                            </div>
+                            <button type="submit" class="form-product__submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer"></footer>
+    </div>
+</body>
+</html>

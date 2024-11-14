@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/css/style.css">
+    <title>Register</title>
+    <script src="/javascripts/RequestManager.js"></script>
+    <script>
+        function onInputFile(event) {
+          RequestManager.handleFileSelect(event, '#imgPreview')
+        }
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <%- include('sections/header')%>
+        <main class="main">
+            <div class="register">
+                <div class="register__container">
+                    <h1>Register Form</h1>
+                    <div class="register__errors errors">
+                        <% if (errors.length > 0) {%>
+                            <ul class="errors__list">
+                                <% errors.forEach(error => { %>
+                                    <li>
+                                        <%= error.msg %>
+                                    </li>
+                               <% }) %>
+                            </ul>
+                        <% } %>
+                    </div>
+                    <div class="register__form form-register">
+                        <h2 class="form-register__title title"><%= data ? "Edit the data" : "Register user" %></h2>
+                        <form action="/users/register<%= data?.id ? '/' + data.id : '' %>" method="post" enctype="multipart/form-data">
+                            <div class="form-register__field">
+                                <label for="reg_Name">Enter your Name</label>
+                                <input type="text" name="name" id="reg_Name" value="<%= data ? data.name : '' %>">
+                            </div>
+                            <div class="form-register__field">
+                                <label for="reg_Email">Enter your Email</label>
+                                <input type="email" name="email" id="reg_Email" value="<%= data ? data.email : '' %>">
+                            </div>
+                            <div class="form-register__field">
+                                <label for="reg_Password">Enter your Password</label>
+                                <input type="password" name="password" id="reg_Password" value="<%= data ? data.password : '' %>">
+                            </div>
+                            <div class="form-register__field field-upload-image">
+                                <label for="avatar">Upload your Avatar</label>
+                                <div class="field-upload-image__input"> <span>Download File</span>
+                                    <input onchange="onInputFile(event)" accept="image/*" type="file" name="avatar" id="reg_Avatar" value="<%= data ? data.avatar : '' %>"></div>
+                                <div class="field-upload-image__image">
+                                    <img id="imgPreview" src="/images/user.png" alt="no image">
+                                </div>
+                            </div>
+                            <button class="form-register__submit-btn" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer"></footer>
+    </div>
+    
+</body>
+</html>

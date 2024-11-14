@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/css/style.css">
+    <title>Products</title>
+</head>
+<body>
+    <div class="wrapper">
+        <%- include('sections/header')%>
+        <main class="main">
+            <div class="products">
+                <div class="products__container">
+                    <div class="products__header">
+                        <h2>Welcome to the Candy Shop</h2>
+                        <div>
+                            <img src="/images/50cent.png" alt="no money">
+                        </div>
+                    </div>
+                    <div class="products__filter filter-products">
+                        <form action="/products" method="get" class="filter-products">
+                            <input placeholder="Name" type="text" name="name">
+                            <input placeholder="Price" type="number" name="price">
+                            <select name="owner">
+                                <% owners.forEach(owner => { %>
+                                    <option value="<%= owner.id %>"><%= owner.name %></option>
+                                <% }); %>
+                            </select>
+                            <button type="submit">Filter</button>
+                            <a href="/products"><button type="button">Clear filter</button></a>
+                        </form>
+                    </div>
+                    <div class="products__items items-products">
+                        <% products.forEach(product => { %>
+                        <div class="items-products__item products-item">
+                            <div class="products-item__image">
+                                <img src="<%= product.prodImage %>" alt="candy">
+                            </div>
+                            <h4 class="products-item__name"><%= product.name %></h4>
+                            <span class="products-item__price"><%= product.price %></span>
+                            <p class="products-item__description"><%= product.description %></p>
+                            <span class="products-item__owner"><%= product.owner.name %></span>
+                            <div class="products-item__options options-product">
+                                <button class="options-product__add" type="button">Add to wishes list</button>
+                                <button class="options-product__buy" type="button">Buy</button>
+                                <button class="options-product__details" type="button">Details</button>
+                                <div class="options-product__count">
+                                    <label for="productQuantity">Quantity</label>
+                                    <input min="1" id="productQuantity" type="number" value="1">
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer"></footer>
+    </div>
+</body>
+</html>
