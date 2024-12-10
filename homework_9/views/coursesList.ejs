@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Courses and Seminars</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/main.css" />
+    <script src="/javascripts/RequestManager.js"></script>
+  </head>
+  <body>
+    <ul>
+      <li><a href="/">На головну</a></li>
+      <li><a href="/student">Students</a></li> <!-- Виправлено шлях до студентів -->
+    </ul>
+
+    <h1>Courses and Seminars</h1>
+
+    <!-- Список курсів -->
+    <h2>Courses</h2>
+    <ul>
+      <% courses.forEach(course => { %>
+        <li>
+          <h3><%= course.title %></h3>
+          <p>Duration: <%= course.duration %></p>
+          <% if (course.students && course.students.length > 0) { %>
+            <% course.students.forEach(student => { %>
+              <li><%= student.name %> - Average Grade: <%= student.averageGrade %></li>
+            <% }) %>
+          <% } else { %>
+            <li>No students enrolled in this course.</li>
+          <% } %>
+          <h4>Seminars:</h4>
+          <ul>
+            <% if (course.seminars && course.seminars.length > 0) { %>
+              <% course.seminars.forEach(seminar => { %>
+                <li>
+                  <p>Topic: <%= seminar.topic %></p>
+                  <p>Duration: <%= seminar.duration %> hours</p>
+                  <p>Student: <%= seminar.responsibleStudent ? seminar.responsibleStudent.name : 'N/A' %></p>
+                </li>
+              <% }) %>
+            <% } else { %>
+              <li>No seminars available for this course.</li>
+            <% } %>
+          </ul>
+          <a href="/courses/register/<%= course._id %>">Edit Course</a>
+          <button
+            onclick="RequestManager.deleteRequest('/courses', '<%= course._id %>')">
+            Delete Course
+          </button>
+        </li>
+        <hr>
+      <% }) %>
+    </ul>
+
+    <h4>All Seminars:</h4>
+          <ul>
+            <% if (seminars && seminars.length > 0) { %>
+              <% seminars.forEach(seminar => { %>
+                <li>
+                  <p>Topic: <%= seminar.topic %></p>
+                  <p>Duration: <%= seminar.duration %> hours</p>
+                  <p>Student: <%= seminar.responsibleStudent ? seminar.responsibleStudent.name : 'N/A' %></p>
+                </li>
+                <li>
+                  <a href="/seminars/register/<%= seminar._id %>">Edit Seminar</a>
+                  <button
+                    onclick="RequestManager.deleteRequest('/courses', '<%= seminar._id %>')">
+                    Delete Seminar
+                  </button>
+                </li>
+              <% }) %>
+            <% } else { %>
+              <li>No seminars available</li>
+            <% } %>
+          </ul>
+
+    <a href="/courses/register">Add New Course</a> 
+    <a href="/seminars/register">Add New Seminar</a> 
+  </body>
+</html>
