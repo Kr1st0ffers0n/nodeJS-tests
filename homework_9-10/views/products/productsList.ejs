@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/main.css" />
+    <script src="/javascripts/RequestManager.js"></script>
+  </head>
+  <body>
+    <%- include('../sections/header') %>
+
+    <main>
+        <% if (products.length > 0) { %>
+          <div class="product-grid">
+            <% products.forEach(product => { %>
+              <div class="product-card">
+                <h2><%= product.title %></h2>
+                <p>Price: $<%= product.price %></p>
+                <p><%= product.description || "No description available" %></p>
+                <% if (product.image) { %>
+                  <img src="data:image/jpeg;base64,<%= product.image %>" alt="<%= product.title %>">
+                <% } else { %>
+                  <img src="/photo-not-available.jpg" alt="No image available">
+                <% } %>
+                <!-- Якщо гість то не відображаємо кнопки -->
+                <% if (user && user.type.role !== "guest") { %>
+                  <a href="/products/register/<%= product.id %>">Edit</a>
+                  <button
+                      onclick="RequestManager.deleteRequest('/products', '<%= product.id %>' )">
+                      Delete
+                  </button>    
+                  <% } %>
+              </div>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <p>No products available.</p>
+        <% } %>
+        <% if (user && user.type.role !== "guest") { %>
+          <a href="/products/register">Додати новий товар</a>
+          <% } %>
+      </main>
+  </body>
+</html>
