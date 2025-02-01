@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "src/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "src/index.js"
+    }
+  ],
+  "env": {
+    "GOOGLE_API_KEY": "@google_api_key",
+    "ELEVEN_LABS_API_KEY": "@eleven_labs_api_key",
+    "ELEVEN_LABS_VOICE_ID": "@eleven_labs_voice_id",
+    "WEBSITE_URL": "https://www.pv-business.online/"
+  }
+} 
