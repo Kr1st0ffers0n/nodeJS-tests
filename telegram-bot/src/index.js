@@ -13,6 +13,19 @@ app.use(express.json());
 // Створюємо екземпляр бота
 const bot = new Telegraf(config.telegram.token);
 
+// Функція для безпечної відправки повідомлень
+async function safeSendMessage(ctx, message, extra = {}) {
+  try {
+    await ctx.reply(message, extra);
+  } catch (error) {
+    if (error.description === 'Forbidden: bot was blocked by the user') {
+      console.log(`Користувач ${ctx.from.id} заблокував бота`);
+    } else {
+      console.error('Помилка відправки повідомлення:', error);
+    }
+  }
+}
+
 // Налаштовуємо webhook URL
 const secretPath = `/webhook/${bot.secretPathComponent()}`;
 
@@ -46,11 +59,11 @@ bot.command('start', async (ctx) => {
     ['🧹 Очистити історію']
   ]).resize();
 
-  await ctx.reply(welcomeMessage, keyboard);
+  await safeSendMessage(ctx, welcomeMessage, keyboard);
 });
 
 // Обробка команди /help
-bot.command('help', (ctx) => {
+bot.command('help', async (ctx) => {
   const helpMessage = `
 Ось список доступних команд:
 
@@ -60,21 +73,21 @@ bot.command('help', (ctx) => {
 
 Ви також можете просто написати своє питання, і я спробую допомогти!
 `;
-  ctx.reply(helpMessage);
+  await safeSendMessage(ctx, helpMessage);
 });
 
 // Обробка команди /clear
 bot.command('clear', async (ctx) => {
   const userId = ctx.from.id;
   googleAIService.clearHistory(userId);
-  await ctx.reply('Історію чату очищено! 🧹');
+  await safeSendMessage(ctx, 'Історію чату очищено! 🧹');
 });
 
 // Обробка кнопки очищення історії
 bot.hears('🧹 Очистити історію', async (ctx) => {
   const userId = ctx.from.id;
   googleAIService.clearHistory(userId);
-  await ctx.reply('Історію чату очищено! 🧹');
+  await safeSendMessage(ctx, 'Історію чату очищено! 🧹');
 });
 
 // Обробка текстових повідомлень
@@ -86,19 +99,25 @@ bot.on('text', async (ctx) => {
   if (!userMessage.startsWith('/')) {
     try {
       // Показуємо "друкує..."
-      await ctx.sendChatAction('typing');
+      try {
+        await ctx.sendChatAction('typing');
+      } catch (error) {
+        if (error.description !== 'Forbidden: bot was blocked by the user') {
+          console.error('Помилка відправки статусу набору:', error);
+        }
+      }
 
       // Отримуємо відповідь від AI
       const response = await googleAIService.generateResponse(userId, userMessage);
 
       // Відправляємо відповідь з HTML-форматуванням
-      await ctx.reply(response, {
+      await safeSendMessage(ctx, response, {
         parse_mode: 'HTML',
         disable_web_page_preview: false
       });
     } catch (error) {
       console.error('Error:', error);
-      await ctx.reply('Вибачте, сталася помилка. Спробуйте ще раз або зверніться до адміністратора.');
+      await safeSendMessage(ctx, 'Вибачте, сталася помилка. Спробуйте ще раз або зверніться до адміністратора.');
     }
   }
 });
@@ -106,7 +125,9 @@ bot.on('text', async (ctx) => {
 // Обробка помилок
 bot.catch((err, ctx) => {
   console.error(`Помилка для ${ctx.updateType}`, err);
-  ctx.reply('Сталася помилка при обробці вашого запиту. Спробуйте ще раз.');
+  if (err.description !== 'Forbidden: bot was blocked by the user') {
+    safeSendMessage(ctx, 'Сталася помилка при обробці вашого запиту. Спробуйте ще раз.');
+  }
 });
 
 // Запускаємо веб-сервер
