@@ -26,7 +26,7 @@ async function safeSendMessage(ctx, message, extra = {}) {
   }
 }
 
-// Налаштовуємо webhook URL
+// Налаштовуємо webhook URL для production
 const secretPath = `/webhook/${bot.secretPathComponent()}`;
 
 // Простий endpoint для перевірки здоров'я застосунку
@@ -34,8 +34,10 @@ app.get('/', (req, res) => {
   res.send('Telegram bot is running!');
 });
 
-// Налаштовуємо webhook
-app.use(bot.webhookCallback(secretPath));
+// Налаштовуємо webhook тільки для production
+if (process.env.RENDER_EXTERNAL_URL) {
+  app.use(bot.webhookCallback(secretPath));
+}
 
 // Обробка команди /start
 bot.command('start', async (ctx) => {
@@ -130,13 +132,16 @@ bot.catch((err, ctx) => {
   }
 });
 
-// Запускаємо веб-сервер
+// Запускаємо веб-сервер і бота
 app.listen(port, async () => {
   try {
     // Отримуємо URL застосунку з Render
     const appUrl = process.env.RENDER_EXTERNAL_URL;
     
     if (appUrl) {
+      // Production mode (Render)
+      console.log('Запуск в режимі production на Render');
+      
       // Видаляємо старий webhook перед встановленням нового
       await bot.telegram.deleteWebhook();
       
@@ -145,10 +150,19 @@ app.listen(port, async () => {
       console.log('🤖 Webhook встановлено успішно!');
       console.log(`🌐 Веб-сервер запущено на порту ${port}`);
     } else {
-      console.error('RENDER_EXTERNAL_URL не знайдено в змінних оточення');
+      // Development mode (Local)
+      console.log('Запуск в режимі розробки локально');
+      
+      // Видаляємо всі webhook'и
+      await bot.telegram.deleteWebhook();
+      
+      // Запускаємо бота в режимі polling
+      await bot.launch();
+      console.log('🤖 Бот запущено в режимі polling');
+      console.log(`🌐 Веб-сервер запущено на порту ${port}`);
     }
   } catch (error) {
-    console.error('Помилка встановлення webhook:', error);
+    console.error('Помилка запуску:', error);
   }
 });
 
