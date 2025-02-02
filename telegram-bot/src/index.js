@@ -7,18 +7,22 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Налаштовуємо Express для обробки JSON
+app.use(express.json());
+
+// Створюємо екземпляр бота
+const bot = new Telegraf(config.telegram.token);
+
+// Налаштовуємо webhook URL
+const secretPath = `/webhook/${bot.secretPathComponent()}`;
+
 // Простий endpoint для перевірки здоров'я застосунку
 app.get('/', (req, res) => {
   res.send('Telegram bot is running!');
 });
 
-// Запускаємо веб-сервер
-app.listen(port, () => {
-  console.log(`Web server is running on port ${port}`);
-});
-
-// Створюємо екземпляр бота
-const bot = new Telegraf(config.telegram.token);
+// Налаштовуємо webhook
+app.use(bot.webhookCallback(secretPath));
 
 // Обробка команди /start
 bot.command('start', async (ctx) => {
@@ -105,15 +109,29 @@ bot.catch((err, ctx) => {
   ctx.reply('Сталася помилка при обробці вашого запиту. Спробуйте ще раз.');
 });
 
-// Запуск бота
-bot.launch()
-  .then(() => {
-    console.log('🤖 Бот успішно запущено!');
-  })
-  .catch((err) => {
-    console.error('Помилка запуску бота:', err);
-  });
+// Запускаємо веб-сервер
+app.listen(port, async () => {
+  // Отримуємо URL застосунку з Render
+  const appUrl = process.env.RENDER_EXTERNAL_URL;
+  
+  if (appUrl) {
+    try {
+      // Встановлюємо webhook
+      await bot.telegram.setWebhook(`${appUrl}${secretPath}`);
+      console.log('🤖 Webhook встановлено успішно!');
+      console.log(`🌐 Веб-сервер запущено на порту ${port}`);
+    } catch (error) {
+      console.error('Помилка встановлення webhook:', error);
+    }
+  } else {
+    console.error('RENDER_EXTERNAL_URL не знайдено в змінних оточення');
+  }
+});
 
 // Включаємо плавне завершення роботи
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM')); 
+process.once('SIGINT', () => {
+  bot.stop('SIGINT');
+});
+process.once('SIGTERM', () => {
+  bot.stop('SIGTERM');
+}); 
